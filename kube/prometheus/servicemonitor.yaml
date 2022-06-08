@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: exemplar-demo
+  labels:
+    app: exemplar-demo
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: exemplar-demo
+  namespaceSelector:
+    any: true
+  endpoints:
+    - port: web
+      path: /actuator/prometheus
+      interval: 30s
