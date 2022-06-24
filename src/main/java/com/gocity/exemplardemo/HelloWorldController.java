@@ -1,6 +1,8 @@
 package com.gocity.exemplardemo;
 
 import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,12 +18,23 @@ public class HelloWorldController {
     private final Random random = new Random();
     private static Logger log = LoggerFactory.getLogger(HelloWorldController.class);
 
+    private final MeterRegistry registry;
+
+    public HelloWorldController(MeterRegistry registry) {
+        this.registry = registry;
+    }
+
     @GetMapping
     @Timed(value="hello_world_timer", histogram = true)
     public ResponseEntity<String> helloWorld() throws Exception {
         int n = random.nextInt(399) + 1; // 1-400ms
         Thread.sleep(n);
         log.info("Hello world");
+
+        Counter.builder("hello_world_counter")
+                .register(registry)
+                .increment();
+
         return new ResponseEntity<>("Hello World", HttpStatus.OK);
     }
 
