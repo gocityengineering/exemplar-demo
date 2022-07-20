@@ -25,15 +25,15 @@ public class HelloWorldController {
     }
 
     @GetMapping
-    @Timed(value="hello_world_timer", histogram = true)
+    @Timed(value="scan_timer", histogram = true)
     public ResponseEntity<String> helloWorld() throws Exception {
-        int n = random.nextInt(399) + 1; // 1-400ms
+        int n = random.nextInt(349) + 1; // 1-400ms
         Thread.sleep(n);
-        log.info("Hello world");
+        log.debug("Hello world");
 
-        Counter.builder("hello_world_counter")
-                .register(registry)
-                .increment();
+//        Counter.builder("hello_world_counter")
+//                .register(registry)
+//                .increment();
 
         return new ResponseEntity<>("Hello World", HttpStatus.OK);
     }
