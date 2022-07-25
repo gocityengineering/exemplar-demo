@@ -1,6 +1,6 @@
 plugins {
-	id 'org.springframework.boot' version '2.7.0'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'org.springframework.boot' version '2.7.1'
+	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
 	id 'java'
 }
 
@@ -10,14 +10,33 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+	maven {
+		url "https://repo.spring.io/snapshot"
+	}
+	maven {
+		url "https://repo.spring.io/milestone"
+	}
+	maven {
+		url "https://repo.spring.io/release"
+	}
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2021.0.3"
+		mavenBom "org.springframework.cloud:spring-cloud-sleuth-otel-dependencies:1.1.0-M6" // Still an experimental project: https://github.com/spring-projects-experimental/spring-cloud-sleuth-otel
+	}
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth:3.1.2'
-	implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin:3.1.2'
+	implementation("org.springframework.cloud:spring-cloud-starter-sleuth") {
+		exclude group: 'org.springframework.cloud', module: 'spring-cloud-sleuth-brave'
+	}
+	implementation "org.springframework.cloud:spring-cloud-sleuth-otel-autoconfigure"
+	implementation 'io.opentelemetry:opentelemetry-exporter-otlp-trace:1.14.0'
 
 	implementation 'io.micrometer:micrometer-registry-prometheus:1.9.0'
 }
