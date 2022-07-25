@@ -29,7 +29,7 @@ public class HelloWorldController {
     public ResponseEntity<String> helloWorld() throws Exception {
         int n = random.nextInt(349) + 1; // 1-400ms
         Thread.sleep(n);
-        log.debug("Hello world");
+        log.info("Hello world");
 
 //        Counter.builder("hello_world_counter")
 //                .register(registry)

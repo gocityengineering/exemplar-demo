@@ -8,9 +8,9 @@ spring:
   application:
     name: exemplar-demo
   sleuth:
-    opentracing:
-      enabled: true
-    propagation:
-      type: b3,w3c
-  zipkin:
-    base-url: http://simplest-collector.default.svc.cluster.local:9411/
+    otel:
+      exporter:
+        otlp:
+          endpoint: http://simplest-collector.default.svc.cluster.local:4317
+      config:
+        trace-id-ratio-based: 1.0
